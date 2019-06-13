@@ -1,0 +1,7 @@
+{
+    "/api":{
+        "target":"http://18.221.238.17/ServiciosCore",
+        "secure":false,
+        "changeOrigin": true
+    }
+}
