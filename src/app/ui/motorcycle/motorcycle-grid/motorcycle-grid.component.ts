@@ -102,7 +102,7 @@ export class MotorcycleGridComponent implements OnInit {
 
   onCellDoubleClicked(data: any) {
     // console.log(data);
-    this.router.navigate(['/user', 'edit', data.data.id]);
+    this.router.navigate(['/motorcycle', 'edit', data.data.id]);
 
   }
 

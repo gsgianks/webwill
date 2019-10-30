@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Motorcycle } from 'src/app/domain/Motorcycle';
+import { User } from 'src/app/domain/User';
 import { Subject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MotorcycleService } from 'src/app/services/motorcycle.service';
+import { UserService } from 'src/app/services/user.service';
 import { takeUntil } from 'rxjs/operators';
 import { FormUtils } from '../../shared/formUtils';
 import * as alertify from 'alertifyjs';
@@ -23,35 +25,39 @@ export class MotorcycleEditComponent implements OnInit {
   form: FormGroup;
   model: Motorcycle = null;
   updating = false;
+  user: User[] = [];
 
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   messages: any = {};
 
   formMessages: any = {
-    nombre: {
+    numeroPlaca: {
       required: FIELD_REQUIRED
     },
-    apellidos: {
+    marca: {
       required: FIELD_REQUIRED
     },
-    cedula: {
+    modelo: {
       required: FIELD_REQUIRED
     },
-    correoElectronico: {
+    ano: {
       required: FIELD_REQUIRED,
       email: FIELD_EMAIL
     },
-    direccion: {
+    serieMarco: {
       required: FIELD_REQUIRED
     },
-    telefonoCelular: {
+    serieMotor: {
       required: FIELD_REQUIRED,
       maxLength: FIELD_MAXLEN_10
     },
-    telefono: {
+    anotaciones: {
       required: FIELD_REQUIRED,
       maxLength: FIELD_MAXLEN_10
+    },
+    idUsuario: {
+      required: FIELD_REQUIRED,
     }
   };
 
@@ -59,12 +65,13 @@ export class MotorcycleEditComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private service: MotorcycleService,
+    private serviceUser: UserService,
     private fb: FormBuilder,
   ) { }
 
   createForm(): void {
     this.form = this.fb.group({
-      iD: [''],
+      id: [''],
       numeroPlaca: ['', [Validators.required]],
       marca: ['', [Validators.required]],
       modelo: ['', [Validators.required]],
@@ -127,6 +134,9 @@ export class MotorcycleEditComponent implements OnInit {
       } as Motorcycle;
       FormUtils.toFormGroup(this.form, this.model);
     }
+
+    //Obtener todos los usuarios
+    this.getUsers();
   }
 
   ngOnDestroy() {
@@ -197,7 +207,20 @@ export class MotorcycleEditComponent implements OnInit {
     // tslint:disable-next-line: only-arrow-functions
     function() {
       // alertify.error('Cancel');
-    });
+    }).set({title:"Eliminar"}).set({labels:{ok:'Aceptar', cancel: 'Cancelar'}});
+  }
+
+  getUsers(): void {
+    this.serviceUser.getAll(1, 200)
+    .subscribe(
+      response => {
+        this.user = response;
+      }
+    );
+  }
+
+  trackByFn(index: number, model: {Id: number}) {
+    return model ? model.Id : undefined;
   }
 
 }
