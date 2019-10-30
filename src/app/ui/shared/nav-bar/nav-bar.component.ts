@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'mot-nav-bar',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor() { }
+  userName = '';
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.authStatus.subscribe(
+      authStatus => {
+        const user = this.authService.getName();
+        setTimeout(() => (this.userName = user));
+      }
+    );
   }
 
 }

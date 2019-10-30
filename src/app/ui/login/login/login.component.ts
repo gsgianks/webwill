@@ -31,15 +31,8 @@ export class LoginComponent implements OnInit {
   login(submittedForm: FormGroup) {
     this.authService.login(submittedForm.value.email, submittedForm.value.password).
     subscribe(authResponse => {
-      console.log(authResponse);
-      // this.router.navigate(['/home']);
-    // tslint:disable-next-line: no-unused-expression
-    }), (error: string) => {
-      alert('error');
-      console.log('error');
-      console.log(error);
-      this.loginError = error;
-    };
+      this.router.navigate(['/home']);
+    }, error => {this.loginError = 'Datos no válidos'; });
   }
 
 

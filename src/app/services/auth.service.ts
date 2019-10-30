@@ -15,7 +15,7 @@ import { Result } from '../common/result';
 })
 export class AuthService extends CacheService {
 
-  private readonly authProvider: (email: string, password: string) => Observable<Result<User, IServerAuthResponse>>;
+  private readonly authProvider: (email: string, password: string) => Observable<IServerAuthResponse>;
   // tslint:disable-next-line: no-use-before-declare
   authStatus = new BehaviorSubject<IAuthStatus>(this.getItem('authStatus') || defaultAuthStatus);
 
@@ -27,8 +27,8 @@ export class AuthService extends CacheService {
     this.authProvider = this.userAuthProvider;
    }
 
-  private userAuthProvider( email: string, password: string): Observable<Result<User, IServerAuthResponse>> {
-    return this.http.post<Result<User, IServerAuthResponse>>(`${environment.urlService}/token`, {email, password});
+  private userAuthProvider( email: string, password: string): Observable<IServerAuthResponse> {
+    return this.http.post<IServerAuthResponse>(`${environment.urlService}/token`, {email, password});
   }
 
   login(email: string, password: string): Observable<IAuthStatus> {
@@ -36,8 +36,9 @@ export class AuthService extends CacheService {
 
     const loginResponse = this.authProvider(email, password).pipe(
       map(value => {
-        this.setToken(value.itemOptional.access_Token);
-        const result = decode(value.itemOptional.access_Token);
+        this.setToken(value.access_Token);
+        const result = decode(value.access_Token);
+        this.setName(result.unique_name);
         return result as IAuthStatus;
       }),
       catchError(transformError)
@@ -45,12 +46,10 @@ export class AuthService extends CacheService {
 
     loginResponse.subscribe(
       res => {
-        console.log(res);
         this.authStatus.next(res);
       },
       err => {
         this.logout();
-        console.log(err);
         return observableThrowError(err);
       }
     );
@@ -71,8 +70,17 @@ export class AuthService extends CacheService {
     return this.getItem('jwt') || '';
   }
 
+  private setName(user: string) {
+    this.setItem('user', user);
+  }
+
+  getName(): string {
+    return this.getItem('user') || '';
+  }
+
   private clearToken() {
     this.removeItem('jwt');
+    this.removeItem('user');
   }
 
   getAuthStatus(): IAuthStatus {
