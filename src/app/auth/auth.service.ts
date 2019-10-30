@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Role } from './role.enum';
+import { Role } from '../domain/role.enum';
 import { Observable, BehaviorSubject, throwError as observableThrowError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -13,22 +13,22 @@ import { CacheService } from './cache.service';
 })
 export class AuthService extends CacheService {
 
-  private readonly authProvider: (email: string, password:string)=> Observable<IServerAuthResponse>;
+  private readonly authProvider: (email: string, password: string) => Observable<IServerAuthResponse>;
   authStatus = new BehaviorSubject<IAuthStatus>(this.getItem('authStatus') || defaultAuthStatus);
 
   constructor(private httpClient: HttpClient) {
     super();
-    this.authStatus.subscribe(authStatus =>{
-      this.setItem('authStatus',authStatus);
+    this.authStatus.subscribe(authStatus => {
+      this.setItem('authStatus', authStatus);
     });
     this.authProvider = this.userAuthProvider;
   }
 
   private userAuthProvider( email: string, password: string): Observable<IServerAuthResponse> {
-    return this.httpClient.post<IServerAuthResponse>(`${environment.urlService}/token`,{email: email,password: password});
+    return this.httpClient.post<IServerAuthResponse>(`${environment.urlService}/token`, {email, password });
   }
 
-  login(email: string, password:string):Observable<IAuthStatus>{
+  login(email: string, password: string): Observable<IAuthStatus> {
     this.logout();
 
     const loginResponse = this.authProvider(email, password).pipe(
@@ -44,7 +44,7 @@ export class AuthService extends CacheService {
       res => {
         this.authStatus.next(res);
       },
-      err=>{
+      err => {
         this.logout();
         return observableThrowError(err);
       }
@@ -52,36 +52,36 @@ export class AuthService extends CacheService {
     return loginResponse;
   }
 
-  logout(){
+  logout() {
     this.clearToken();
     this.authStatus.next(defaultAuthStatus);
   }
 
-  private setToken(jwt: string){
+  private setToken(jwt: string) {
     this.setItem('jwt', jwt);
   }
 
-  getToken(): string{
+  getToken(): string {
     return this.getItem('jwt') || '';
   }
 
   private clearToken() {
-    this.removeItem('jwt');    
+    this.removeItem('jwt');
   }
 
-  getAuthStatus(): IAuthStatus{
+  getAuthStatus(): IAuthStatus {
     return this.getItem('authStatus');
   }
 
 }
-export interface IAuthStatus{
+export interface IAuthStatus {
   role: Role;
   primarysid: number;
   unique_name: string;
 }
 
-interface IServerAuthResponse{
+interface IServerAuthResponse {
   access_Token: string;
 }
 
-const defaultAuthStatus: IAuthStatus = {role:Role.None,primarysid: null, unique_name:null};
+const defaultAuthStatus: IAuthStatus = {role: Role.None, primarysid: null, unique_name: null };

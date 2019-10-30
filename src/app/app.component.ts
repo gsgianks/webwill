@@ -1,30 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'mot-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
-  title = 'serviciosweb';
-  _displayLogin = false;
+export class AppComponent implements OnInit {
+  title = 'taller-motos';
 
-  constructor(private authService: AuthService){
+  DisplayLogin = false;
+
+  constructor(private authService: AuthService) {
 
   }
 
-  ngOnInit():void {
+  ngOnInit(): void {
     this.authService.authStatus.subscribe(
       authStatus => {
         const jwt = this.authService.getToken();
-        setTimeout(() => (this._displayLogin = !(jwt == null || jwt == ''),0));
+        setTimeout(() => (this.DisplayLogin = !(jwt === null || jwt === ''), 0));
       }
     );
   }
 
-  get displayMenu(){
-    return this._displayLogin;
+  get displayMenu() {
+    return this.DisplayLogin;
   }
 
 }

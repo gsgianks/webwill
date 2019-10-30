@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <mat-card class="login-card">
+            <mat-card-content >
+                <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
+                  <div class="login-control-input row">
+                    <mat-icon class="col-1">email</mat-icon>
+                    <mat-form-field class="login-form-field col-11">
+                      <input matInput placeholder="Correo" aria-label="Email" formControlName="email">
+                      <mat-error *ngIf="loginForm.get('email').hasError('required')">Requerido</mat-error>
+                      <mat-error *ngIf="loginForm.get('email').hasError('email')">Correo inválido</mat-error>
+                      <mat-error *ngIf="loginForm.get('email').hasError('cannotContainSpace')">No puede contener espacios</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="login-control-input row">
+                      <mat-icon class="col-1">vpn_key</mat-icon>
+                      <mat-form-field class="login-form-field col-11">
+                        <input matInput placeholder="Contraseña" aria-label="Password" type="password" formControlName="password">
+                        <mat-error *ngIf="loginForm.get('password').hasError('required')">Requerido</mat-error>
+                        <mat-error *ngIf="loginForm.get('password').hasError('minlength')">Minimo 2 caracteres</mat-error>
+                        <mat-error *ngIf="loginForm.get('password').hasError('maxlength')">Máximo 50 caracteres</mat-error>
+                        <mat-error *ngIf="loginForm.get('password').hasError('cannotContainSpace')">No puede contener espacios</mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div *ngIf="loginError">
+                    <p class="login-error">{{loginError}}</p>
+                  </div>
+                  <div class="mx-auto">
+                    <button class="float-right" mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
+                   </div>
+                </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+</div>
+    <!-- <body>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+              <div class="card-body">
+                <h5 class="card-title text-center">Sign In</h5>
+                <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login(loginForm)">
+                  <div class="form-label-group">
+                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                    <label for="inputEmail">Email address</label>
+                  </div>
+    
+
+                    
+                    <mat-form-field class="form-label-group row">
+                      <mat-icon>vpn_key</mat-icon>
+                      <input class="form-control" matInput placeholder="Password" aria-label="Password" type="password" formControlName="password">
+                      <mat-error *ngIf="loginForm.get('password').hasError('required')">Password is required</mat-error>
+                      <mat-error *ngIf="loginForm.get('password').hasError('minlength')">Password is at least 2 characters long</mat-error>
+                      <mat-error *ngIf="loginForm.get('password').hasError('maxlength')">Password can not longer that 50 characters</mat-error>
+                      <mat-error *ngIf="loginForm.get('password').hasError('cannotContainSpace')">Password cannot contain Space</mat-error>
+                    </mat-form-field>
+
+    
+                  <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                    <label class="custom-control-label" for="customCheck1">Remember password</label>
+                  </div>
+                  <button class="float-right" mat-raised-button type="submit" color="primary" [disabled]="loginForm.invalid">Login</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+  </div> -->
+
+  

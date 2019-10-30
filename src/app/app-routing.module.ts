@@ -1,59 +1,38 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule, Router } from '@angular/router';
-import { NotFoundComponent } from './shared/not-found/not-found.component';
-import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
-import { AuthGuard } from './auth/auth.guard';
+import { Routes, RouterModule } from '@angular/router';
+import { LoginComponent } from './ui/login/login/login.component';
+import { LogoutComponent } from './ui/login/logout/logout.component';
 
-const appRouters:Routes = [
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
   {
     path: 'home',
-    loadChildren: './home/home.module#HomeModule',
-    canLoad: [AuthGuard]
+    loadChildren: './ui/home/home.module#HomeModule'
   },
   {
-    path:'usuario',
-    loadChildren:'./usuario/usuario.module#UsuarioModule',
-    canLoad: [AuthGuard]
+    path: 'user',
+    loadChildren: './ui/user/user.module#UserModule'
   },
   {
-    path:'order',
-    loadChildren:'./order/order.module#OrderModule',
-    canLoad: [AuthGuard]
+    path: 'motorcycle',
+    loadChildren: './ui/motorcycle/motorcycle.module#MotorcycleModule'
   },
   {
-    path:'supplier',
-    loadChildren:'./supplier/supplier.module#SupplierModule',
-    canLoad: [AuthGuard]
+    path: 'login',
+    component: LoginComponent
   },
   {
-    path:'login', 
-    component:LoginComponent
-  },
-  {
-    path:'logout',
+    path: 'logout',
     component: LogoutComponent
-  },
-
-  {
-    path:'', 
-    redirectTo:'/login', 
-    pathMatch:'full'
-  },
-  {
-    path:'**',
-    component:NotFoundComponent
   }
-]
+];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(appRouters)
-  ],
-  exports: [RouterModule], 
-  declarations: []
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {
-
- }
+export class AppRoutingModule { }

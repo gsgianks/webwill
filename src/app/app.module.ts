@@ -1,34 +1,35 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import 'hammerjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
-import { AppRoutingModule } from './/app-routing.module';
-import { LoginComponent } from './login/login.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from './auth/auth.service';
+import { LoginComponent } from './ui/login/login/login.component';
+import { MaterialModule } from './shared/material/material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LogoutComponent } from './logout/logout.component';
+import { NavBarComponent } from './ui/shared/nav-bar/nav-bar.component';
+import { LogoutComponent } from './ui/login/logout/logout.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthHttpInterceptor } from './auth/AuthHttpInterceptor';
-import { MaterialModule } from './/material.module';
+
 
 @NgModule({
   declarations: [
-    
     AppComponent,
     LoginComponent,
+    NavBarComponent,
     LogoutComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    SharedModule,
     AppRoutingModule,
-    FormsModule, ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NgbModule
   ],
   providers: [AuthService, AuthGuard,
     {

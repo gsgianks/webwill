@@ -1,0 +1,101 @@
+<div class="container-fluid">
+        <div class="row">
+          <div class="col-12 pt-2">
+            <div class="row header">
+              <div class="col-12">
+                <h2 class="float-left">Detalle Motocicleta</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <form [formGroup]="form" (ngSubmit)="submit()">
+                  <div [hidden]="true">
+                    <mat-form-field>
+                      <input matInput formControlName="iD" />
+                    </mat-form-field>
+                  </div>
+            
+                  <div>
+                    <mat-form-field class="col-12">
+                      <input matInput placeholder="Placa" formControlName="numeroPlaca" />
+                      <mat-error *ngIf="messages.numeroPlaca">
+                        {{ messages.numeroPlaca }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+            
+                  <div>
+                    <mat-form-field class="col-12">
+                      <input matInput placeholder="Marca" formControlName="marca" />
+                      <mat-error *ngIf="messages.marca">
+                        {{ messages.marca}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+      
+                  <div>
+                      <mat-form-field class="col-12">
+                          <input matInput placeholder="Modelo" formControlName="modelo" />
+                          <mat-error *ngIf="messages.modelo">
+                          {{ messages.modelo}}
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="col-12">
+                          <input matInput placeholder="Año" formControlName="ano" />
+                          <mat-error *ngIf="messages.ano">
+                          {{ messages.ano}}
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="col-12">
+                          <input matInput placeholder="Serie del marco" formControlName="serieMarco" />
+                          <mat-error *ngIf="messages.serieMarco">
+                          {{ messages.serieMarco}}
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="col-12">
+                          <input matInput placeholder="Serie del Motor" formControlName="serieMotor" />
+                          <mat-error *ngIf="messages.serieMotor">
+                          {{ messages.serieMotor}}
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="col-12">
+                          <input matInput placeholder="Anotaciones" formControlName="anotaciones" />
+                          <mat-error *ngIf="messages.anotaciones">
+                          {{ messages.anotaciones}}
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                  <div>
+                        <mat-form-field class="col-12">
+                            <input matInput placeholder="Usuario" formControlName="idUsuario" />
+                            <mat-error *ngIf="messages.idUsuario">
+                            {{ messages.idUsuario}}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                  
+                  <div class="col-12">
+                    <button mat-raised-button color="primary" type="submit"
+                      [disabled]="(!form.valid && form.dirty) || !form.dirty || updating">
+                      Guardar
+                    </button>
+                    &nbsp;
+                    <button *ngIf="updating" mat-raised-button type="button" color="warn" (click)="delete(model.id)">Eliminar</button> 
+                    &nbsp;
+                    <button mat-raised-button type="button" color="primary" (click)="goToList()">Volver</button>
+                    
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

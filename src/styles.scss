@@ -1,9 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
-.new-customer-modal-dialog{
-    width: 40%;
-    @media (max-width:767px) {
-        width: 90%;
-    }
-}
+@import "~bootstrap/dist/css/bootstrap.css";  
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
