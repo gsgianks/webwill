@@ -9,6 +9,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserComponent } from './user.component';
 import { UserGridComponent } from './user-grid/user-grid.component';
 import { UserDisplayComponent } from './user-display/user-display.component';
+import { MotorcycleModule } from '../motorcycle/motorcycle.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { UserDisplayComponent } from './user-display/user-display.component';
     MaterialModule,
     FormsModule,
     UserRoutingModule,
+    MotorcycleModule,
     AgGridModule.withComponents([])
   ],
   entryComponents: [

@@ -8,13 +8,15 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MotorcycleEditComponent } from './motorcycle-edit/Motorcycle-edit.component';
 import { MotorcycleGridComponent } from './motorcycle-grid/Motorcycle-grid.component';
 import { MotorcycleDisplayComponent } from './motorcycle-display/Motorcycle-display.component';
+import { MotorcycleListUserComponent } from './motorcycle-list-user/motorcycle-list-user.component';
 
 @NgModule({
   declarations: [
     MotorcycleViewComponent,
     MotorcycleEditComponent,
     MotorcycleGridComponent,
-    MotorcycleDisplayComponent
+    MotorcycleDisplayComponent,
+    MotorcycleListUserComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +29,9 @@ import { MotorcycleDisplayComponent } from './motorcycle-display/Motorcycle-disp
   entryComponents: [
     MotorcycleEditComponent,
     MotorcycleDisplayComponent
+  ],
+  exports: [
+    MotorcycleListUserComponent
   ]
 })
 export class MotorcycleModule { }

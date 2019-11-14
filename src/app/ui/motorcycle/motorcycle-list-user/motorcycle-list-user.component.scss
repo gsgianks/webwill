@@ -1,0 +1,35 @@
+.botones{
+    padding-top: 10px;
+    .mat-primary{
+        margin-left: 1%;
+    }
+}
+
+.motorcycle-card{
+    display: inline-block;
+    margin: 1% 0 0 1%;
+    @media (max-width: 767px) {
+        width: 98%;
+    }
+
+    @media only screen and (max-width: 991px) and (min-width: 768px){
+        width: 48.5%;
+    }
+    @media only screen and (max-width: 1199px) and (min-width: 992px) {
+        width: 32%;
+    }
+
+    @media only screen and (min-width : 1200px) {
+        width: 23.8%;
+    }
+}
+
+#imagenPerfil{
+    width: 100%;
+    height: auto;
+}
+.paginator-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

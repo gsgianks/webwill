@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 import { takeUntil } from 'rxjs/operators';
 import { FormUtils } from '../../shared/formUtils';
 import * as alertify from 'alertifyjs';
+import { HttpEventType, HttpClient } from '@angular/common/http';
 
 const FIELD_REQUIRED = 'Campo Requerido.';
 const FIELDMA_MAXLEN_2 = 'Minimo 2 digitos.';
@@ -26,6 +27,50 @@ export class MotorcycleEditComponent implements OnInit {
   model: Motorcycle = null;
   updating = false;
   user: User[] = [];
+
+  /*file begin */
+  fileData: File = null;
+  previewUrl: any = null;
+  fileUploadProgress: string = null;
+  uploadedFilePath: string = null;
+
+  public progress: number;
+  public message: string;
+ 
+fileProgress(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+    this.preview();
+
+    let fileToUpload = <File>fileInput.target.files[0];
+    const formData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+ 
+    this.service.upload(formData).subscribe(
+      response => {
+        if(response.code == 0){
+          this.model.imagenPerfil = response.description;
+        }else{
+          alertify.error(response.description);
+        }
+      }
+    );
+}
+ 
+preview() {
+    // Show preview 
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+ 
+    var reader = new FileReader();      
+    reader.readAsDataURL(this.fileData); 
+    reader.onload = (_event) => { 
+      this.previewUrl = reader.result; 
+    }
+}
+
+   /*file end */
 
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
@@ -66,7 +111,7 @@ export class MotorcycleEditComponent implements OnInit {
     private route: ActivatedRoute,
     private service: MotorcycleService,
     private serviceUser: UserService,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) { }
 
   createForm(): void {
@@ -124,6 +169,8 @@ export class MotorcycleEditComponent implements OnInit {
       this.service.getById(id).subscribe({
         next: model => {
           this.model = model;
+          this.previewUrl = model.imagenPerfil;
+          this.uploadedFilePath = model.imagenPerfil;
           FormUtils.toFormGroup(this.form, this.model);
         }
       });

@@ -11,4 +11,5 @@ export class Motorcycle {
     idUsuario: number;
     idPlaca: number;
     idPlan: number;
+    imagen: File;
 }

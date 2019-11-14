@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Motorcycle } from '../domain/Motorcycle';
+import { Answer } from '../common/answer';
 
 @Injectable({
     providedIn: 'root'
@@ -37,10 +38,16 @@ export class MotorcycleService {
     }
 
     insert(data: Motorcycle): Observable<Motorcycle> {
-        data.id = undefined;
         return this.http.post(`${environment.urlService}/Motocicleta`, data)
         .pipe(
           map((response: any) => response)
         );
-      }
+    }
+
+    upload(data: FormData): Observable<Answer> {
+        return this.http.post(`${environment.urlService}/Motocicleta/Upload`, data)
+        .pipe(
+          map((response: any) => response)
+        );
+    }
 }

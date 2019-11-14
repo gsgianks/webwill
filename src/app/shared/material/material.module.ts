@@ -28,7 +28,8 @@ const modules = [
   MatOptionModule,
   MatNativeDateModule,
   MatToolbarModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatPaginatorModule
 ];
 
 @NgModule({

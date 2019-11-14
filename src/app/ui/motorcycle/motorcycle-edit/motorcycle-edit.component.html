@@ -74,15 +74,8 @@
                       </mat-form-field>
                   </div>
                   <div>
-                        <!-- <mat-form-field class="col-12">
-                            <input matInput placeholder="Usuario" formControlName="idUsuario" />
-                            <mat-error *ngIf="messages.idUsuario">
-                            {{ messages.idUsuario}}
-                            </mat-error>
-                        </mat-form-field>
-                  -->
                     <mat-form-field class="col-12">
-                        <mat-label>Project Manager</mat-label>
+                        <mat-label>Usuario</mat-label>
                         <mat-select formControlName="idUsuario">
                           <mat-option>- Seleccionar Usuario -</mat-option>
                           <mat-option *ngFor="let pm of user; trackBy: trackByFn" [value]="pm.id">
@@ -93,7 +86,26 @@
                           {{ messages.idUsuario }}
                         </mat-error>
                       </mat-form-field>
-                    </div>
+                  </div>
+                  <div>
+                      <div class="col-md-12">
+                          <mat-label>Imagen</mat-label>        
+                          <div class="form-group">
+                              <input type="file" name="image" (change)="fileProgress($event)" />
+                          </div>
+                          <div *ngIf="fileUploadProgress">
+                              Upload progress: {{ fileUploadProgress }}
+                          </div>
+                          <div class="image-preview mb-3" *ngIf="previewUrl">
+                              <img [src]="previewUrl" height="300" />                 
+                          </div>
+                
+                          <div class="mb-3" *ngIf="uploadedFilePath">
+                              {{uploadedFilePath}}
+                          </div>
+                      </div>
+                  </div>
+                  
                   <div class="col-12">
                     <button mat-raised-button color="primary" type="submit"
                       [disabled]="(!form.valid && form.dirty) || !form.dirty">
