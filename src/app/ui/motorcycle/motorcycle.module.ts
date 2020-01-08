@@ -5,18 +5,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/material/material.module';
 import { MotorcycleRoutingModule } from './motorcycle-routing.module';
 import { AgGridModule } from 'ag-grid-angular';
-import { MotorcycleEditComponent } from './motorcycle-edit/Motorcycle-edit.component';
-import { MotorcycleGridComponent } from './motorcycle-grid/Motorcycle-grid.component';
-import { MotorcycleDisplayComponent } from './motorcycle-display/Motorcycle-display.component';
-import { MotorcycleListUserComponent } from './motorcycle-list-user/motorcycle-list-user.component';
+import * as MotorcycleComponents from '.';
 
 @NgModule({
   declarations: [
-    MotorcycleViewComponent,
-    MotorcycleEditComponent,
-    MotorcycleGridComponent,
-    MotorcycleDisplayComponent,
-    MotorcycleListUserComponent
+    MotorcycleComponents.MotorcycleViewComponent,
+    MotorcycleComponents.MotorcycleEditComponent,
+    MotorcycleComponents.MotorcycleGridComponent,
+    MotorcycleComponents.MotorcycleDisplayComponent,
+    MotorcycleComponents.MotorcycleListUserComponent
   ],
   imports: [
     CommonModule,
@@ -27,11 +24,11 @@ import { MotorcycleListUserComponent } from './motorcycle-list-user/motorcycle-l
     AgGridModule.withComponents([])
   ],
   entryComponents: [
-    MotorcycleEditComponent,
-    MotorcycleDisplayComponent
+    MotorcycleComponents.MotorcycleEditComponent,
+    MotorcycleComponents.MotorcycleDisplayComponent
   ],
   exports: [
-    MotorcycleListUserComponent
+    MotorcycleComponents.MotorcycleListUserComponent
   ]
 })
 export class MotorcycleModule { }

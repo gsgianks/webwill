@@ -20,6 +20,10 @@ const motorcycleRoutes: Routes = [
   {
     path: 'edit/:id',
     component: MotorcycleComponents.MotorcycleEditComponent
+  },
+  {
+    path: 'edit/:id/:origen/:idUsuario',
+    component: MotorcycleComponents.MotorcycleEditComponent
   }
 ];
 

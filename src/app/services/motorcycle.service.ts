@@ -50,4 +50,9 @@ export class MotorcycleService {
           map((response: any) => response)
         );
     }
+
+    getPaginated(page: number, rows: number, id: number): Observable<Motorcycle[]> {
+        return this.http.post<Motorcycle[]>(`${environment.urlService}/Motocicleta/ListaPaginada/`, {page, rows, id});
+    }
+
 }

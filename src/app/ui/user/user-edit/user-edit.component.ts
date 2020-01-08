@@ -67,7 +67,7 @@ export class UserEditComponent implements OnInit {
       id: [''],
       nombre: ['', [Validators.required]],
       apellidos: ['', [Validators.required]],
-      cedula: ['', [Validators.required]],
+      identificacion: ['', [Validators.required]],
       correoElectronico: ['', [Validators.required, Validators.email]],
       direccion: ['', [Validators.required]],
       telefonoCelular: ['', [Validators.required, Validators.maxLength(10)]],
@@ -77,7 +77,7 @@ export class UserEditComponent implements OnInit {
     const fieldsToWatch = [
       'nombre',
       'apellidos',
-      'cedula',
+      'identificacion',
       'correoElectronico',
       'direccion',
       'telefonoCelular',

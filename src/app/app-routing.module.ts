@@ -22,6 +22,10 @@ const routes: Routes = [
     loadChildren: './ui/motorcycle/motorcycle.module#MotorcycleModule'
   },
   {
+    path: 'receivingsheet',
+    loadChildren: './ui/receivingsheet/receivingsheet.module#ReceivingSheetModule'
+  },
+  {
     path: 'login',
     component: LoginComponent
   },

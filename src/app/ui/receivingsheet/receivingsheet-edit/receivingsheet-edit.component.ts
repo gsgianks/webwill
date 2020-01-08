@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Motorcycle } from 'src/app/domain/Motorcycle';
-import { User } from 'src/app/domain/User';
+import { ReceivingSheet } from 'src/app/domain/ReceivingSheet';
 import { Subject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MotorcycleService } from 'src/app/services/motorcycle.service';
-import { UserService } from 'src/app/services/user.service';
-import { takeUntil } from 'rxjs/operators';
+import { ReceivingSheetService } from 'src/app/services/receivingsheet.service';
 import { FormUtils } from '../../shared/formUtils';
+import { takeUntil } from 'rxjs/operators';
 import * as alertify from 'alertifyjs';
-import { HttpEventType, HttpClient } from '@angular/common/http';
+import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/domain/User';
+import { MotorcycleService } from 'src/app/services/motorcycle.service';
+import { Motorcycle } from 'src/app/domain/Motorcycle';
 
 const FIELD_REQUIRED = 'Campo Requerido.';
 const FIELDMA_MAXLEN_2 = 'Minimo 2 digitos.';
@@ -17,127 +18,61 @@ const FIELD_MAXLEN_10 = 'Máximo 10 digitos.';
 const FIELD_EMAIL = 'Email no válido.';
 
 @Component({
-  selector: 'mot-motorcycle-edit',
-  templateUrl: './motorcycle-edit.component.html',
-  styleUrls: ['./motorcycle-edit.component.scss']
+  selector: 'mot-receivingsheet-edit',
+  templateUrl: './receivingsheet-edit.component.html',
+  styleUrls: ['./receivingsheet-edit.component.scss']
 })
-export class MotorcycleEditComponent implements OnInit {
+export class ReceivingSheetEditComponent implements OnInit {
 
   form: FormGroup;
-  model: Motorcycle = null;
-  updating = false;
+  model: ReceivingSheet = null;
   user: User[] = [];
-  origen = 0;
-  idUsuario = 0;
-
-  /*file begin */
-  fileData: File = null;
-  previewUrl: any = null;
-  fileUploadProgress: string = null;
-  uploadedFilePath: string = null;
-
-  public progress: number;
-  public message: string;
- 
-fileProgress(fileInput: any) {
-    this.fileData = <File>fileInput.target.files[0];
-    this.preview();
-
-    let fileToUpload = <File>fileInput.target.files[0];
-    const formData = new FormData();
-    formData.append('file', fileToUpload, fileToUpload.name);
- 
-    this.service.upload(formData).subscribe(
-      response => {
-        if(response.code == 0){
-          this.model.imagenPerfil = response.description;
-        }else{
-          alertify.error(response.description);
-        }
-      }
-    );
-}
- 
-preview() {
-    // Show preview 
-    var mimeType = this.fileData.type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
- 
-    var reader = new FileReader();      
-    reader.readAsDataURL(this.fileData); 
-    reader.onload = (_event) => { 
-      this.previewUrl = reader.result; 
-    }
-}
-
-   /*file end */
+  motorcycle: Motorcycle[] = [];
+  updating = false;
 
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   messages: any = {};
-
   formMessages: any = {
-    numeroPlaca: {
+    idUsuario: {
       required: FIELD_REQUIRED
     },
-    marca: {
+    idMotocicleta: {
       required: FIELD_REQUIRED
     },
-    modelo: {
-      required: FIELD_REQUIRED
-    },
-    ano: {
+    trabajoRealizar: {
       required: FIELD_REQUIRED,
       email: FIELD_EMAIL
     },
-    serieMarco: {
+    observaciones: {
       required: FIELD_REQUIRED
-    },
-    serieMotor: {
-      required: FIELD_REQUIRED,
-      maxLength: FIELD_MAXLEN_10
-    },
-    anotaciones: {
-      required: FIELD_REQUIRED,
-      maxLength: FIELD_MAXLEN_10
-    },
-    idUsuario: {
-      required: FIELD_REQUIRED,
     }
   };
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private service: MotorcycleService,
+    private service: ReceivingSheetService,
     private serviceUser: UserService,
-    private fb: FormBuilder
+    private serviceMotocycle: MotorcycleService,
+    private fb: FormBuilder,
   ) { }
 
   createForm(): void {
     this.form = this.fb.group({
       id: [''],
-      numeroPlaca: ['', [Validators.required]],
-      marca: ['', [Validators.required]],
-      modelo: ['', [Validators.required]],
-      ano: ['', [Validators.required]],
-      serieMarco: ['', [Validators.required]],
-      serieMotor: ['', [Validators.required]],
-      anotaciones: [''],
-      idUsuario: ['', [Validators.required]]
+      idUsuario: ['', [Validators.required]],
+      idMotocicleta: ['', [Validators.required]],
+      trabajoRealizar: ['', [Validators.required]],
+      observaciones: [''],
+      fechaSalida: [''],
     });
 
     const fieldsToWatch = [
-      'numeroPlaca',
-      'marca',
-      'modelo',
-      'ano',
-      'serieMarco',
-      'serieMotor',
-      'anotaciones',
-      'idUsuario'
+      'idUsuario',
+      'idMotocicleta',
+      'trabajoRealizar',
+      'observaciones'
     ];
     fieldsToWatch.forEach(x => this.addFieldWatch(this.form.get(x), this.messages, this.formMessages, x));
 
@@ -148,6 +83,8 @@ preview() {
 
   addFieldWatch(ctrl: AbstractControl, errorMessages: any, defaultMessages: any, name: string): void {
     ctrl.valueChanges
+      // the operator takeUntil will keep alive the subscription until the Subject tells
+      // them to complete (see ngOnDestroy below)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => this.setMessage(ctrl, errorMessages, defaultMessages, name));
   }
@@ -166,15 +103,11 @@ preview() {
     this.createForm();
 
     const id = +this.route.snapshot.paramMap.get('id');
-    this.origen = +this.route.snapshot.paramMap.get('origen');
-    this.idUsuario = +this.route.snapshot.paramMap.get('idUsuario');
 
     if (id) {
       this.service.getById(id).subscribe({
         next: model => {
           this.model = model;
-          this.previewUrl = model.imagenPerfil;
-          this.uploadedFilePath = model.imagenPerfil;
           FormUtils.toFormGroup(this.form, this.model);
         }
       });
@@ -182,14 +115,18 @@ preview() {
     } else {
       this.model = {
         id: 0
-      } as Motorcycle;
+      } as ReceivingSheet;
       FormUtils.toFormGroup(this.form, this.model);
     }
 
-    //Obtener todos los usuarios
+    // Obtener todos los usuarios
     this.getUsers();
+
+    // Obtener todos las motocicletas
+    this.getMotorcycles();
   }
 
+  // tslint:disable-next-line: use-lifecycle-interface
   ngOnDestroy() {
     // trigger the next and complete on the Subject observable to signal to the
     // running subscriptions to complete as well
@@ -200,7 +137,7 @@ preview() {
   submit() {
 
     if (!this.form.valid) {
-      alertify.success('Formulario invalido');
+      alertify.error('Formulario invalido');
     } else {
       FormUtils.toModel(this.form, this.model);
       this.saveModel();
@@ -220,10 +157,10 @@ preview() {
     }
   }
 
-  showSuccess(response: Motorcycle): void {
+  showSuccess(response: ReceivingSheet): void {
     alertify.success('Registro guardado exitosamente.');
     this.model = response;
-    this.form.controls['id'].setValue(this.model.id);
+    this.form.controls.id.setValue(this.model.id);
     this.updating = true;
     // FormUtils.toFormGroup(this.form, this.model);
     // console.log(response);
@@ -235,14 +172,7 @@ preview() {
   }
 
   return(): void {
-    if(this.origen != 0 && this.idUsuario != 0)
-    {
-      this.router.navigate(['/user', 'edit', this.idUsuario]);
-    }
-    else
-    {
-      this.router.navigate(['./motorcycle']);
-    }
+    this.router.navigate(['./receivingsheet']);
   }
 
   delete(id: number): void {
@@ -257,7 +187,7 @@ preview() {
       .subscribe({
         next() {
           alertify.success('Registro eliminado exitosamente.');
-          rout.navigate(['./motorcycle']);
+          rout.navigate(['./receivingsheet']);
         },
         error: showErro.bind(this)
       });
@@ -265,7 +195,7 @@ preview() {
     // tslint:disable-next-line: only-arrow-functions
     function() {
       // alertify.error('Cancel');
-    }).set({title:"Eliminar"}).set({labels:{ok:'Aceptar', cancel: 'Cancelar'}});
+    });
   }
 
   getUsers(): void {
@@ -273,6 +203,15 @@ preview() {
     .subscribe(
       response => {
         this.user = response;
+      }
+    );
+  }
+
+  getMotorcycles(): void {
+    this.serviceMotocycle.getAll()
+    .subscribe(
+      response => {
+        this.motorcycle = response;
       }
     );
   }

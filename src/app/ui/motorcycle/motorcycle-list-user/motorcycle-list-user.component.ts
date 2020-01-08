@@ -24,11 +24,11 @@ export class MotorcycleListUserComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.getAll();
+    this.getAll(1);
   }
 
-  getAll(): void {
-    this.service.getAll()
+  getAll(page: number): void {
+    this.service.getPaginated(page, this.pageSize, this.idUser)
     .subscribe(
       response => {
         this.motorcycles = response;
@@ -37,22 +37,16 @@ export class MotorcycleListUserComponent implements OnInit {
   }
 
   search(): void {
-    this.service.getAll()
-    .subscribe(
-      response => {
-        this.motorcycles = response;
-        this.numberOfRecords = 15;
-      }
-    );
+    this.getAll(1);
   }
 
   changePage(event: any): void {
-    this.getAll();
+    this.getAll(1);
   }
 
   edit(id: number) {
     // console.log(data);
-    this.router.navigate(['/motorcycle', 'edit', id]);
+    this.router.navigate(['/motorcycle', 'edit', id, 1, this.idUser]);
 
   }
 

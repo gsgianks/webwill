@@ -1,0 +1,87 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-12 pt-2">
+        <div class="row header">
+          <div class="col-12">
+            <h2 class="float-left">Detalle Hoja Recibimiento</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <form [formGroup]="form" (ngSubmit)="submit()">
+              <div [hidden]="true">
+                <mat-form-field>
+                  <input matInput formControlName="id" />
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field class="col-12">
+                    <mat-label>Usuario</mat-label>
+                    <mat-select formControlName="idUsuario">
+                      <mat-option>- Seleccionar Usuario -</mat-option>
+                      <mat-option *ngFor="let us of user; trackBy: trackByFn" [value]="us.id">
+                        {{ us.nombre +' '+ us.apellidos }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="messages.idUsuario">
+                      {{ messages.idUsuario }}
+                    </mat-error>
+                  </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field class="col-12">
+                    <mat-label>Usuario</mat-label>
+                    <mat-select formControlName="idMotocicleta">
+                      <mat-option>- Seleccionar Motocicleta -</mat-option>
+                      <mat-option *ngFor="let mo of motorcycle; trackBy: trackByFn" [value]="mo.id">
+                        {{ mo.numeroPlaca +' '+ mo.marca+' '+ mo.modelo }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="messages.idMotocicleta">
+                      {{ messages.idMotocicleta }}
+                    </mat-error>
+                  </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field class="col-12">
+                  <input matInput placeholder="Trabajo Realizar" formControlName="trabajoRealizar" />
+                  <mat-error *ngIf="messages.trabajoRealizar">
+                    {{ messages.trabajoRealizar }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field class="col-12">
+                  <input matInput placeholder="Observaciones" formControlName="observaciones" />
+                  <mat-error *ngIf="messages.observaciones">
+                    {{ messages.observaciones}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div *ngIf="updating">
+                <mat-form-field class="col-12">
+                    <input matInput [matDatepicker]="fechaSalida" placeholder="Fecha Salida" formControlName="observaciones">
+                    <mat-datepicker-toggle matSuffix [for]="fechaSalida"></mat-datepicker-toggle>
+                    <mat-datepicker #fechaSalida></mat-datepicker>
+                    <mat-error *ngIf="messages.fechaSalida">
+                            {{ messages.fechaSalida}}
+                          </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <button mat-raised-button color="primary" type="submit"
+                  [disabled]="(!form.valid && form.dirty) || !form.dirty">
+                  Guardar
+                </button>
+                &nbsp;
+                <button *ngIf="updating" mat-raised-button type="button" color="warn" (click)="delete(model.id)">Eliminar</button> 
+                &nbsp;
+                <button mat-raised-button type="button" color="primary" (click)="return()">Volver</button>
+                
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

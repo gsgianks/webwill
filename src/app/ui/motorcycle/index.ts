@@ -2,3 +2,4 @@ export { MotorcycleDisplayComponent } from './motorcycle-display/Motorcycle-disp
 export { MotorcycleViewComponent } from './motorcycle-view/Motorcycle-view.component';
 export { MotorcycleEditComponent } from './motorcycle-edit/Motorcycle-edit.component';
 export { MotorcycleGridComponent } from './motorcycle-grid/Motorcycle-grid.component';
+export { MotorcycleListUserComponent } from './motorcycle-list-user/motorcycle-list-user.component';
