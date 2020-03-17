@@ -20,28 +20,35 @@ export class UserViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe({
-      next: (params: Params) => {
-        // tslint:disable-next-line: no-string-literal
-        const id = +params['id'];
-        if (this.id !== id && id) {
-          this.userService.getById(id).subscribe({ next: model => (this.model = model) });
-          this.id = id;
-        }
-      }
-    });
+    // this.route.params.subscribe({
+    //   next: (params: Params) => {
+    //     // tslint:disable-next-line: no-string-literal
+    //     const id = +params['id'];
+    //     if (this.id !== id && id) {
+    //       this.userService.getById(id).subscribe(res => {
+    //         if (res.code === 0) {
+    //           this.model = res.items[0];
+    //         } else {
+    //           // alerti
+    //           // Agregar alertify del error
+    //         }
+    //       });
+    //       this.id = id;
+    //     }
+    //   }
+    // });
   }
 
-  selectModel(selectedModel: User, toEdit = false): void {
+  // selectModel(selectedModel: User, toEdit = false): void {
 
-    if (toEdit) {
-      this.router.navigate(['/user', 'edit', selectedModel.id]);
-    } else {
-      this.router.navigate(['/user', selectedModel.id]);
-    }
-  }
+  //   if (toEdit) {
+  //     this.router.navigate(['/user', 'edit', selectedModel.id]);
+  //   } else {
+  //     this.router.navigate(['/user', selectedModel.id]);
+  //   }
+  // }
 
-  onCancelEdit(): void {
-    this.router.navigate(['/user']);
-  }
+  // onCancelEdit(): void {
+  //   this.router.navigate(['/user']);
+  // }
 }

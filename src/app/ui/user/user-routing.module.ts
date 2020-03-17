@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { UserGridComponent } from './user-grid/user-grid.component';
 import { AuthGuard } from '../../auth/auth.guard';
 import { Role } from '../../domain/role.enum';
 import { UserEditComponent } from './user-edit/user-edit.component';

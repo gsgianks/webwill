@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { ReceivingSheet } from '../domain/ReceivingSheet';
-import { Answer } from '../common/answer';
+import { ResultBaseModel } from '../common/ResultBaseModel';
 
 @Injectable({
     providedIn: 'root'

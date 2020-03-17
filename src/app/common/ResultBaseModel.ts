@@ -1,4 +1,4 @@
-export class Answer {
+export class ResultBaseModel {
     code: number;
     description: string;
 }

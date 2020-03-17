@@ -74,8 +74,7 @@
                 </mat-form-field>
             </div>
             <div class="col-12">
-              <button mat-raised-button color="primary" type="submit"
-                [disabled]="(!form.valid && form.dirty) || !form.dirty || updating">
+              <button mat-raised-button color="primary" type="submit">
                 Guardar
               </button>
               &nbsp;
@@ -84,6 +83,7 @@
               <button mat-raised-button type="button" color="primary" (click)="goToList()">Volver</button>
               
             </div>
+            {{messages.nombre}}
           </form>
         </div>
       </div>

@@ -269,10 +269,10 @@ preview() {
   }
 
   getUsers(): void {
-    this.serviceUser.getAll(1, 200)
+    this.serviceUser.getAll()
     .subscribe(
       response => {
-        this.user = response;
+        this.user = response.items;
       }
     );
   }

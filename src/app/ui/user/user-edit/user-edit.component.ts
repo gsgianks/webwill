@@ -7,6 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 import { takeUntil } from 'rxjs/operators';
 import { FormUtils } from '../../shared/formUtils';
 import * as alertify from 'alertifyjs';
+import { ConfirmationDialogService } from '../../shared/confirmation-dialog/confirmation-dialog.service';
 
 const FIELD_REQUIRED = 'Campo Requerido.';
 const FIELDMA_MAXLEN_2 = 'Minimo 2 digitos.';
@@ -60,6 +61,7 @@ export class UserEditComponent implements OnInit {
     private route: ActivatedRoute,
     private service: UserService,
     private fb: FormBuilder,
+    private confirmationDialogService: ConfirmationDialogService
   ) { }
 
   createForm(): void {
@@ -84,7 +86,7 @@ export class UserEditComponent implements OnInit {
       'telefono'
     ];
     fieldsToWatch.forEach(x => this.addFieldWatch(this.form.get(x), this.messages, this.formMessages, x));
-
+    console.log(this.messages);
     if (this.model) {
       FormUtils.toFormGroup(this.form, this.model);
     }
@@ -114,10 +116,12 @@ export class UserEditComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
 
     if (id) {
-      this.service.getById(id).subscribe({
-        next: model => {
-          this.model = model;
+      this.service.getById(id).subscribe( res => {
+        if (res.code === 0) {
+          this.model = res.items[0];
           FormUtils.toFormGroup(this.form, this.model);
+        } else {
+          alertify.error(res.description);
         }
       });
       this.updating = true;
@@ -129,9 +133,8 @@ export class UserEditComponent implements OnInit {
     }
   }
 
+  // tslint:disable-next-line: use-lifecycle-interface
   ngOnDestroy() {
-    // trigger the next and complete on the Subject observable to signal to the
-    // running subscriptions to complete as well
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -139,7 +142,7 @@ export class UserEditComponent implements OnInit {
   submit() {
 
     if (!this.form.valid) {
-      alertify.success('Formulario invalido');
+      alertify.error('Formulario inválido');
     } else {
       FormUtils.toModel(this.form, this.model);
       this.saveModel();
@@ -151,26 +154,27 @@ export class UserEditComponent implements OnInit {
     if (this.model.id) {
       this.service
         .update(this.model)
-        .subscribe({ next: this.showSuccess.bind(this), error: this.showError.bind(this) });
+        .subscribe(res => {
+          if (res.code === 0) {
+            alertify.success(res.description);
+          } else {
+            alertify.error(res.description);
+          }
+        });
     } else {
       this.service
         .insert(this.model)
-        .subscribe({ next: this.showSuccess.bind(this), error: this.showError.bind(this) });
+        .subscribe(res => {
+          if (res.code === 0) {
+            this.form.controls.id.setValue(res.items[0].id);
+            this.model = res.items[0];
+            this.updating = true;
+            alertify.success(res.description);
+          } else {
+            alertify.error(res.description);
+          }
+        });
     }
-  }
-
-  showSuccess(response: User): void {
-    alertify.success('Registro guardado exitosamente.');
-    this.model = response;
-    this.form.controls['id'].setValue(this.model.id);
-    this.updating = true;
-    // FormUtils.toFormGroup(this.form, this.model);
-    // console.log(response);
-  }
-
-  showError(error: any): void {
-    const msg: string = (error && error.error && error.error.error && error.error.error.message) || error.message;
-    alertify.error(msg);
   }
 
   goToList(): void {
@@ -178,26 +182,22 @@ export class UserEditComponent implements OnInit {
   }
 
   delete(id: number): void {
-    const rout = this.router;
-    const serv = this.service;
-    const showErro = this.showError;
 
-    alertify.confirm('¿Desea eliminar el registro?',
-    // tslint:disable-next-line: only-arrow-functions
-    function() {
-      serv.delete(id)
-      .subscribe({
-        next() {
-          alertify.success('Registro eliminado exitosamente.');
-          rout.navigate(['./user']);
-        },
-        error: showErro.bind(this)
-      });
-    },
-    // tslint:disable-next-line: only-arrow-functions
-    function() {
-      // alertify.error('Cancel');
-    });
+    this.confirmationDialogService.confirm('Confirmación', '¿Desea eliminar el registro?')
+    .then((confirmed) => {
+      if (confirmed) {
+        this.service.delete(id)
+          .subscribe(response => {
+            if (response.code === 0) {
+              alertify.success(response.description);
+              this.goToList();
+            } else {
+              alertify.error(response.description);
+            }
+          });
+      }
+    })
+    .catch(() => {});
   }
 
 }

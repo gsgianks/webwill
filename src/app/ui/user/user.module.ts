@@ -7,14 +7,17 @@ import { AgGridModule } from 'ag-grid-angular';
 import { UserComponent } from './user.component';
 import { MotorcycleModule } from '../motorcycle/motorcycle.module';
 import * as UserComponents from '.';
+import { UserTableComponent } from './user-table/user-table.component';
+import { ConfirmationDialogService } from '../shared/confirmation-dialog/confirmation-dialog.service';
 
 @NgModule({
   declarations: [
     UserComponents.UserViewComponent,
     UserComponents.UserEditComponent,
-    UserComponents.UserGridComponent,
     UserComponents.UserDisplayComponent,
+    UserComponents.UserTableComponent,
     UserComponent,
+    UserTableComponent
   ],
   imports: [
     CommonModule,
@@ -28,6 +31,9 @@ import * as UserComponents from '.';
   entryComponents: [
     UserComponents.UserEditComponent,
     UserComponents.UserDisplayComponent
+  ],
+  providers: [
+    ConfirmationDialogService
   ]
 })
 export class UserModule { }

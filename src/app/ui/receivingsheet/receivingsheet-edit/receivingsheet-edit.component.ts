@@ -199,7 +199,7 @@ export class ReceivingSheetEditComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.serviceUser.getAll(1, 200)
+    this.serviceUser.getAllPaginated(1, 200)
     .subscribe(
       response => {
         this.user = response;

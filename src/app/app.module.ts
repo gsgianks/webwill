@@ -13,6 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthHttpInterceptor } from './auth/AuthHttpInterceptor';
+import { ConfirmationDialogComponent } from './ui/shared/confirmation-dialog/confirmation-dialog.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { AuthHttpInterceptor } from './auth/AuthHttpInterceptor';
     AppComponent,
     LoginComponent,
     NavBarComponent,
-    LogoutComponent
+    LogoutComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +39,9 @@ import { AuthHttpInterceptor } from './auth/AuthHttpInterceptor';
       useClass: AuthHttpInterceptor,
       multi: true
     }
+  ],
+  entryComponents: [
+    ConfirmationDialogComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Motorcycle } from '../domain/Motorcycle';
-import { Answer } from '../common/answer';
+import { ResultBaseModel } from '../common/ResultBaseModel';
 
 @Injectable({
     providedIn: 'root'
@@ -44,7 +44,7 @@ export class MotorcycleService {
         );
     }
 
-    upload(data: FormData): Observable<Answer> {
+    upload(data: FormData): Observable<ResultBaseModel> {
         return this.http.post(`${environment.urlService}/Motocicleta/Upload`, data)
         .pipe(
           map((response: any) => response)
